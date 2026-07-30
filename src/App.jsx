@@ -62,12 +62,15 @@ export default function App() {
     try {
       const connected = await freighterIsConnected();
       if (connected?.error) {
-        throw new Error("Freighter tidak terdeteksi. Install extension-nya dulu.");
+        throw new Error(
+          "Freighter tidak terdeteksi. Install extension-nya dulu.",
+        );
       }
 
       // Minta akses (munculkan popup approve di Freighter)
       const access = await requestAccess();
-      if (access?.error) throw new Error(access.error.message || "Akses ditolak.");
+      if (access?.error)
+        throw new Error(access.error.message || "Akses ditolak.");
 
       const addr = access.address || (await getAddress()).address;
       setPublicKey(addr);
@@ -75,9 +78,12 @@ export default function App() {
       const net = await getNetwork();
       setNetworkLabel(net?.network || "");
 
-      if (net?.networkPassphrase && net.networkPassphrase !== NETWORK_PASSPHRASE) {
+      if (
+        net?.networkPassphrase &&
+        net.networkPassphrase !== NETWORK_PASSPHRASE
+      ) {
         setGlobalError(
-          "⚠️ Wallet kamu tidak di-set ke Testnet. Buka Freighter → Settings → ganti network ke Testnet."
+          "⚠️ Wallet kamu tidak di-set ke Testnet. Buka Freighter → Settings → ganti network ke Testnet.",
         );
       }
 
@@ -117,11 +123,17 @@ export default function App() {
     setGlobalError("");
 
     if (!isValidPublicKey(destination)) {
-      setTxResult({ status: "error", message: "Destination address tidak valid." });
+      setTxResult({
+        status: "error",
+        message: "Destination address tidak valid.",
+      });
       return;
     }
     if (!amount || Number(amount) <= 0) {
-      setTxResult({ status: "error", message: "Amount harus lebih besar dari 0." });
+      setTxResult({
+        status: "error",
+        message: "Amount harus lebih besar dari 0.",
+      });
       return;
     }
 
@@ -138,7 +150,8 @@ export default function App() {
         networkPassphrase: NETWORK_PASSPHRASE,
         address: publicKey,
       });
-      if (signed?.error) throw new Error(signed.error.message || "Signing dibatalkan.");
+      if (signed?.error)
+        throw new Error(signed.error.message || "Signing dibatalkan.");
 
       const result = await submitSignedXDR(signed.signedTxXdr);
 
@@ -163,8 +176,8 @@ export default function App() {
   return (
     <div className="app-shell">
       <header className="app-header">
-        <h1>⭐ Stellar Payment dApp</h1>
-        <p className="muted">Testnet payment dApp — White Belt submission</p>
+        <h1>⭐ Stellar Payment dApp Sakha</h1>
+        <p className="muted">Testnet payment dApp White Belt submission</p>
       </header>
 
       {globalError && <div className="alert">{globalError}</div>}
@@ -188,14 +201,21 @@ export default function App() {
             notFunded={notFunded}
           />
 
-          <SendPayment onSend={handleSend} isSending={isSending} disabled={notFunded} />
+          <SendPayment
+            onSend={handleSend}
+            isSending={isSending}
+            disabled={notFunded}
+          />
 
           <TxResult result={txResult} />
         </>
       )}
 
       <footer className="app-footer">
-        <span className="muted">Network: Stellar Testnet · Powered by Freighter</span>
+        <span className="muted">
+          Network: Stellar Testnet · Powered by Freighter · By Sakha Ibadil
+          Kirom
+        </span>
       </footer>
     </div>
   );
